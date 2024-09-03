@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals" # Ajusta la ruta de los archivos según tu computadora
+input_folder = "C:/Users/Hp/Documents/Internals"       # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_mushroom"
 
 # Archivos HDR y RAW
