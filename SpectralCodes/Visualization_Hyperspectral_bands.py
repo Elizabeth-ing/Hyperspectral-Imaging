@@ -1,4 +1,4 @@
-#CODE 1
+#CODE 1: VISUALIZATION OF ONE OF THE BANDS OF THE HYPERSPECTRAL IMAGE
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
