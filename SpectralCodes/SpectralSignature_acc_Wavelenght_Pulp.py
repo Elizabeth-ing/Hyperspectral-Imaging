@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"    # Ajusta la ruta de los archivos según tu computadora
+input_folder = "C:/Users/Hp/Documents/Internals"      # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_apple"
 
 # Archivos HDR y RAW
@@ -52,6 +52,7 @@ if 'wavelength' in metadata:
  print("\nLongitudes de onda (wavelength):")
  print(wavelengths)
 else:
+ 
  # Usar los índices de las bandas como "longitudes de onda" si no están presentes en los metadatos
  wavelengths = np.arange(bands)
  print("\nLongitudes de onda no disponibles en los metadatos. Usando índices de bandas.")
