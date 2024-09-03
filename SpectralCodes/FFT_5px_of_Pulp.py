@@ -1,4 +1,4 @@
-#CODE 4.2: FOURIER TRANSFORM FOR 5 PIXELS OF SEEDS OF FRUIT
+#CODE 4.2: FOURIER TRANSFORM FOR 5 PIXELS OF PULP OF FRUIT
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
