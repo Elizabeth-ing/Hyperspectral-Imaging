@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from scipy.stats import skew, kurtosis
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"
+input_folder = "C:/Users/Hp/Documents/Internals"    # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_papaya"
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
@@ -113,8 +113,7 @@ plt.figure(figsize=(15, 12))
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[xx.ravel(), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 2])), np.full_like(xx.ravel(), np.mean(X[:,
-3]))])
+Z = knn.predict(np.c_[xx.ravel(), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 2])), np.full_like(xx.ravel(), np.mean(X[:,3]))])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 1)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
@@ -152,8 +151,7 @@ plt.ylabel('Kurtosis')
 x_min, x_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 y_min, y_max = X[:, 2].min() - 1, X[:, 2].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), xx.ravel(), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:,
-3]))])
+Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), xx.ravel(), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:,3]))])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 4)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
