@@ -1,4 +1,4 @@
-#CODE 2
+#CODE 2: SPECTRAL SIGNATURE ACCORDING TO WAVELENGTH
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
