@@ -1,4 +1,4 @@
-# CODE 7: CLASSIFIER. SUPPORT VECTOR MACHINE (SVM)
+# CODE 6: CLASSIFIER. SUPPORT VECTOR MACHINE (SVM)
 # Librerías
 import spectral.io.envi as envi
 import numpy as np
@@ -8,14 +8,18 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from scipy.stats import skew, kurtosis
 from sklearn.svm import SVC
+
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"    # Ajusta la ruta de los archivos según tu computadora
+input_folder = "C:/Users/Hp/Documents/Internals"         # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_papaya"
+
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
 raw_file = f"{input_folder}/{base_name}.raw"
+
 # Leer metadatos
 metadata = envi.read_envi_header(hdr_file)
+
 # Dimensiones de la imagen
 rows = int(metadata['lines'])
 cols = int(metadata['samples'])
@@ -26,8 +30,10 @@ print("Filas:", rows)
 print("Columnas:", cols)
 print("Número de bandas:", bands)
 print("Tipo de datos:", dtype)
+
 # Cargar la imagen hiperespectral
 img = envi.open(hdr_file, raw_file).load()
+
 # Coordenadas de las semillas y la pulpa
 seed_coords = [
  (409, 456), (421, 465), (429, 468), (425, 460), (408, 451),
@@ -73,17 +79,22 @@ pulp_coords = [
  (236,483), (255,359), (407,320), (440,303), (449,318),
  (504,293), (494,316), (518,342), (557,292), (552,329)
 ]
+
 # Verificar si las coordenadas están dentro del rango de la imagen
 valid_seed_coords = [(y, x) for y, x in seed_coords if y < rows and x < cols]
 valid_pulp_coords = [(y, x) for y, x in pulp_coords if y < rows and x < cols]
+
 # Etiquetas : 0 = semillas, 1 = pulpa
 labels_seed = [0] * len(valid_seed_coords)
 labels_pulp = [1] * len(valid_pulp_coords)
+
 # Unión de los datos y etiquetas
 coords = valid_seed_coords + valid_pulp_coords
 labels = labels_seed + labels_pulp
+
 # Extraer los espectros de los píxeles seleccionados
 spectra = [img[y, x, :].flatten() for (y, x) in coords]
+
 # Calcular los momentos estadísticos para cada espectro
 def compute_moments(spectrum):
  return [
@@ -92,18 +103,24 @@ def compute_moments(spectrum):
  skew(spectrum),
  kurtosis(spectrum)
  ]
+
 # Aplicar la función a todos los espectros
 moments = [compute_moments(spectrum) for spectrum in spectra]
+
 # Datos de entrenamiento y prueba (75 entrenamiento, 25 prueba por clase)
 X = np.array(moments)
 y = np.array(labels)
+
 # Seleccionar 75 datos de entrenamiento y 25 de prueba por clase
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
 # Crear y entrenar el modelo MSV
 svm = SVC(kernel = 'rbf' , C = 1 , gamma = 0.125) #valores c=1,100 gamma=0.125,0.25,0.5,1.0,2.0
 svm.fit(X_train, y_train)
+
 # Predicciones en el conjunto de prueba
 y_pred = svm.predict(X_test)
+
 # Graficar los pares de momentos estadísticos
 plt.figure(figsize=(15, 12))
 plt.subplot(2, 3, 1)
@@ -113,40 +130,40 @@ plt.xlabel('Media')
 plt.ylabel('Desviación Estándar')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[1] for f in X_test][i]))
- plt.subplot(2, 3, 2)
- plt.scatter([f[0] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
- plt.title('Media vs Asimetría')
- plt.xlabel('Media')
- plt.ylabel('Asimetría')
+plt.subplot(2, 3, 2)
+plt.scatter([f[0] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
+plt.title('Media vs Asimetría')
+plt.xlabel('Media')
+plt.ylabel('Asimetría')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[2] for f in X_test][i]))
- plt.subplot(2, 3, 3)
- plt.scatter([f[0] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
- plt.title('Media vs Kurtosis')
- plt.xlabel('Media')
- plt.ylabel('Kurtosis')
+plt.subplot(2, 3, 3)
+plt.scatter([f[0] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
+plt.title('Media vs Kurtosis')
+plt.xlabel('Media')
+plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[3] for f in X_test][i]))
- plt.subplot(2, 3, 4)
- plt.scatter([f[1] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
- plt.title('Desviación Estándar vs Asimetría')
- plt.xlabel('Desviación Estándar')
- plt.ylabel('Asimetría')
+plt.subplot(2, 3, 4)
+plt.scatter([f[1] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
+plt.title('Desviación Estándar vs Asimetría')
+plt.xlabel('Desviación Estándar')
+plt.ylabel('Asimetría')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[1] for f in X_test][i], [f[2] for f in X_test][i]))
- plt.subplot(2, 3, 5)
- plt.scatter([f[1] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
- plt.title('Desviación Estándar vs Kurtosis')
- plt.xlabel('Desviación Estándar')
- plt.ylabel('Kurtosis')
+plt.subplot(2, 3, 5)
+plt.scatter([f[1] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
+plt.title('Desviación Estándar vs Kurtosis')
+plt.xlabel('Desviación Estándar')
+plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[1] for f in X_test][i], [f[3] for f in X_test][i]))
- plt.subplot(2, 3, 6)
- plt.scatter([f[2] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
- plt.title('Asimetría vs Kurtosis')
- plt.xlabel('Asimetria')
- plt.ylabel('Kurtosis')
+plt.subplot(2, 3, 6)
+plt.scatter([f[2] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
+plt.title('Asimetría vs Kurtosis')
+plt.xlabel('Asimetria')
+plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[2] for f in X_test][i], [f[3] for f in X_test][i]))
- plt.tight_layout()
- plt.show()
+plt.tight_layout()
+plt.show()
