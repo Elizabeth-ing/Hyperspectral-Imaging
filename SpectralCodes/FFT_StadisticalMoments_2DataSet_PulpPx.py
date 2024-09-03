@@ -1,4 +1,4 @@
-# CODE 5: FOURIER TRANSFORM AND STATISTICAL MOMENTS FOR 2 DATA SETS OF PULP PIXEL
+# CODE 5.1: FOURIER TRANSFORM AND STATISTICAL MOMENTS FOR 2 DATA SETS OF PULP PIXEL
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
@@ -37,13 +37,6 @@ img = envi.open(hdr_file, raw_file).load()
 # Verificar las dimensiones de la imagen cargada
 print("Dimensiones de la imagen cargada:", img.shape)
 
-# Mostrar una banda específica de la imagen
-plt.figure()
-plt.imshow(np.array(img[:,:,129]))
-plt.title('Banda 129')
-plt.colorbar()
-plt.show()
-
 #PAPAYA
 pixel_coords = [
  (258,446), (290,480), (256,416), (268,376), (297,370),
@@ -75,11 +68,11 @@ pixel_coords = [
 # Verificar si las coordenadas están dentro del rango de la imagen
 valid_coords = []
 for coord in pixel_coords:
-    y, x = coord
-    if y < rows and x < cols:
-        valid_coords.append((y, x))
-    else:
-        print(f"Coordenada {(y, x)} está fuera del rango de la imagen. Dimensiones de la imagen: ({rows}, {cols})")
+ y, x = coord
+ if y < rows and x < cols:
+ valid_coords.append((y, x))
+ else:
+ print(f"Coordenada {(y, x)} está fuera del rango de la imagen. Dimensiones de la imagen: ({rows}, {cols})")
 
 # Extraer los espectros de los píxeles seleccionados
 spectra = [img[y, x, :].flatten() for (y, x) in valid_coords]
@@ -92,10 +85,9 @@ if 'wavelength' in metadata:
  wavelengths = np.array(metadata['wavelength'], dtype=float)
  print("\nLongitudes de onda (wavelength):")
  print(wavelengths)
-
 else:
  
- # Usar los índices de las bandas como "longitudes de onda" si no están presentes en los metadatos
+# Usar los índices de las bandas como "longitudes de onda" si no están presentes en los metadatos
  wavelengths = np.arange(bands)
  print("\nLongitudes de onda no disponibles en los metadatos. Usando índices de bandas.")
 
