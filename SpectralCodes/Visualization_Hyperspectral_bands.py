@@ -1,3 +1,4 @@
+#CODE 1
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
