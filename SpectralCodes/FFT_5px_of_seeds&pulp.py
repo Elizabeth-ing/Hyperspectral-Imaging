@@ -1,4 +1,4 @@
-#CODE 4
+#CODE 4: FOURIER TRANSFORM FOR 5 PIXELS OF PULP AND FRUIT
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
