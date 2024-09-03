@@ -130,6 +130,7 @@ plt.xlabel('Media')
 plt.ylabel('Desviación Estándar')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[1] for f in X_test][i]))
+ 
 plt.subplot(2, 3, 2)
 plt.scatter([f[0] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
 plt.title('Media vs Asimetría')
@@ -137,6 +138,7 @@ plt.xlabel('Media')
 plt.ylabel('Asimetría')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[2] for f in X_test][i]))
+
 plt.subplot(2, 3, 3)
 plt.scatter([f[0] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
 plt.title('Media vs Kurtosis')
@@ -144,6 +146,7 @@ plt.xlabel('Media')
 plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[0] for f in X_test][i], [f[3] for f in X_test][i]))
+ 
 plt.subplot(2, 3, 4)
 plt.scatter([f[1] for f in X_test], [f[2] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
 plt.title('Desviación Estándar vs Asimetría')
@@ -151,6 +154,7 @@ plt.xlabel('Desviación Estándar')
 plt.ylabel('Asimetría')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[1] for f in X_test][i], [f[2] for f in X_test][i]))
+ 
 plt.subplot(2, 3, 5)
 plt.scatter([f[1] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
 plt.title('Desviación Estándar vs Kurtosis')
@@ -158,6 +162,7 @@ plt.xlabel('Desviación Estándar')
 plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[1] for f in X_test][i], [f[3] for f in X_test][i]))
+
 plt.subplot(2, 3, 6)
 plt.scatter([f[2] for f in X_test], [f[3] for f in X_test], c=y_pred, cmap='coolwarm', alpha=0.7)
 plt.title('Asimetría vs Kurtosis')
@@ -165,5 +170,6 @@ plt.xlabel('Asimetria')
 plt.ylabel('Kurtosis')
 for i, txt in enumerate(y_pred):
  plt.annotate(txt, ([f[2] for f in X_test][i], [f[3] for f in X_test][i]))
+
 plt.tight_layout()
 plt.show()
