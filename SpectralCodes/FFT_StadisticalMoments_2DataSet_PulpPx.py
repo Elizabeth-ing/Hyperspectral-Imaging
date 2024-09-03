@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import skew, kurtosis
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"
+input_folder = "C:/Users/Hp/Documents/Internals"    # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_papaya"
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
@@ -30,11 +30,11 @@ img = envi.open(hdr_file, raw_file).load()
 # Verificar las dimensiones de la imagen cargada
 print("Dimensiones de la imagen cargada:", img.shape)
 # Mostrar una banda específica de la imagen
-#plt.figure()
-#plt.imshow(np.array(img[:,:,129]))
-#plt.title('Banda 129')
-#plt.colorbar()
-#plt.show()
+plt.figure()
+plt.imshow(np.array(img[:,:,129]))
+plt.title('Banda 129')
+plt.colorbar()
+plt.show()
 #PAPAYA
 pixel_coords = [
  (258,446), (290,480), (256,416), (268,376), (297,370),
