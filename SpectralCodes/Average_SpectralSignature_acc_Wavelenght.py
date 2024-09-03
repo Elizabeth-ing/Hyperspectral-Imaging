@@ -1,4 +1,4 @@
-# CODE 3
+# CODE 3: AVERAGE OF SPECTRAL SIGNATURE ACCORDING TO WAVELENGTH
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
