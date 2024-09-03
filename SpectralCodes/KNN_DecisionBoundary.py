@@ -1,4 +1,4 @@
-# CODE 9: KNN AND DECISION BOUNDARY
+# CODE 8: KNN AND DECISION BOUNDARY
 # Librerías
 import spectral.io.envi as envi
 import numpy as np
@@ -7,17 +7,22 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from scipy.stats import skew, kurtosis
+
 # Directorio de entrada y nombre base del archivo
 input_folder = "C:/Users/Hp/Documents/Internals"    # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_papaya"
+
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
 raw_file = f"{input_folder}/{base_name}.raw"
+
 # Leer metadatos
 metadata = envi.read_envi_header(hdr_file)
+
 # Imprimir metadatos
 print("Metadatos del archivo HDR:")
 print(metadata)
+
 # Dimensiones de la imagen
 rows = int(metadata['lines'])
 cols = int(metadata['samples'])
@@ -28,8 +33,10 @@ print("Filas:", rows)
 print("Columnas:", cols)
 print("Número de bandas:", bands)
 print("Tipo de datos:", dtype)
+
 # Cargar la imagen hiperespectral
 img = envi.open(hdr_file, raw_file).load()
+
 # Coordenadas de las semillas y la pulpa
 seed_coords = [
  (409, 456), (421, 465), (429, 468), (425, 460), (408, 451),
@@ -75,17 +82,22 @@ pulp_coords = [
  (236,483), (255,359), (407,320), (440,303), (449,318),
  (504,293), (494,316), (518,342), (557,292), (552,329)
 ]
+
 # Verificar si las coordenadas están dentro del rango de la imagen
 valid_seed_coords = [(y, x) for y, x in seed_coords if y < rows and x < cols]
 valid_pulp_coords = [(y, x) for y, x in pulp_coords if y < rows and x < cols]
+
 # Etiquetas: 0 = semillas, 1 = pulpa
 labels_seed = [0] * len(valid_seed_coords)
 labels_pulp = [1] * len(valid_pulp_coords)
+
 # Unión de los datos y etiquetas
 coords = valid_seed_coords + valid_pulp_coords
 labels = labels_seed + labels_pulp
+
 # Extraer los espectros de los píxeles seleccionados
 spectra = [img[y, x, :].flatten() for (y, x) in coords]
+
 # Calcular los momentos estadísticos para cada espectro
 def compute_moments(spectrum):
  return [
@@ -94,21 +106,27 @@ def compute_moments(spectrum):
  skew(spectrum),
  kurtosis(spectrum)
  ]
+
 # Aplicar la función a todos los espectros
 moments = [compute_moments(spectrum) for spectrum in spectra]
 # Datos de entrenamiento y prueba (75 entrenamiento, 25 prueba por clase)
 X = np.array(moments)
 y = np.array(labels)
+
 # Seleccionar 75 datos de entrenamiento y 25 de prueba por clase
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
 # Crear y entrenar el modelo KNN
 knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(X_train, y_train)
 y_pred = knn.predict(X_test)
+
 # Crear una malla de puntos para graficar las fronteras de decisión
 h = 1 # paso de la malla
+
 # Graficar los pares de momentos estadísticos
 plt.figure(figsize=(15, 12))
+
 # Media vs Desviación Estándar
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
@@ -121,12 +139,12 @@ plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, cmap='coolwarm', edgecolors='k
 plt.title('Media vs Desviación Estándar')
 plt.xlabel('Media')
 plt.ylabel('Desviación Estándar')
+
 # Media vs Asimetría
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 2].min() - 1, X[:, 2].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 1])), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:,
-3]))])
+Z = knn.predict(np.c_[xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 1])), yy.ravel(), np.full_like(xx.ravel(), np.mean(X[:,3]))])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 2)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
@@ -134,12 +152,12 @@ plt.scatter(X_test[:, 0], X_test[:, 2], c=y_pred, cmap='coolwarm', edgecolors='k
 plt.title('Media vs Asimetría')
 plt.xlabel('Media')
 plt.ylabel('Asimetría')
+
 # Media vs Kurtosis
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 3].min() - 1, X[:, 3].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 1])), np.full_like(xx.ravel(), np.mean(X[:, 2])),
-yy.ravel()])
+Z = knn.predict(np.c_[xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 1])), np.full_like(xx.ravel(), np.mean(X[:, 2])), yy.ravel()])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 3)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
@@ -147,6 +165,7 @@ plt.scatter(X_test[:, 0], X_test[:, 3], c=y_pred, cmap='coolwarm', edgecolors='k
 plt.title('Media vs Kurtosis')
 plt.xlabel('Media')
 plt.ylabel('Kurtosis')
+
 # Desviación Estándar vs Asimetría
 x_min, x_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 y_min, y_max = X[:, 2].min() - 1, X[:, 2].max() + 1
@@ -159,12 +178,12 @@ plt.scatter(X_test[:, 1], X_test[:, 2], c=y_pred, cmap='coolwarm', edgecolors='k
 plt.title('Desviación Estándar vs Asimetría')
 plt.xlabel('Desviación Estándar')
 plt.ylabel('Asimetría')
+
 # Desviación Estándar vs Kurtosis
 x_min, x_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 y_min, y_max = X[:, 3].min() - 1, X[:, 3].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 2])),
-yy.ravel()])
+Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), xx.ravel(), np.full_like(xx.ravel(), np.mean(X[:, 2])), yy.ravel()])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 5)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
@@ -172,12 +191,12 @@ plt.scatter(X_test[:, 1], X_test[:, 3], c=y_pred, cmap='coolwarm', edgecolors='k
 plt.title('Desviación Estándar vs Kurtosis')
 plt.xlabel('Desviación Estándar')
 plt.ylabel('Kurtosis')
+
 # Asimetría vs Kurtosis
 x_min, x_max = X[:, 2].min() - 1, X[:, 2].max() + 1
 y_min, y_max = X[:, 3].min() - 1, X[:, 3].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), np.full_like(xx.ravel(), np.mean(X[:, 1])), xx.ravel(),
-yy.ravel()])
+Z = knn.predict(np.c_[np.full_like(xx.ravel(), np.mean(X[:, 0])), np.full_like(xx.ravel(), np.mean(X[:, 1])), xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
 plt.subplot(2, 3, 6)
 plt.contourf(xx, yy, Z, alpha=0.4, cmap='coolwarm')
