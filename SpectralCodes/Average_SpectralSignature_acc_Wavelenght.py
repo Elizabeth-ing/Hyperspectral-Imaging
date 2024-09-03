@@ -4,7 +4,7 @@ import spectral.io.envi as envi
 import matplotlib.pyplot as plt
 import numpy as np
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"
+input_folder = "C:/Users/Hp/Documents/Internals"   # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_kiwi"
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
@@ -29,14 +29,14 @@ img = envi.open(hdr_file, raw_file).load()
 # Verificar las dimensiones de la imagen cargada
 print("Dimensiones de la imagen cargada:", img.shape)
 # Mostrar una banda específica de la imagen
-#plt.figure()
-#plt.imshow(np.array(img[:,:,129]))
-#plt.title('Banda 129')
-#plt.colorbar()
-#plt.show()
+plt.figure()
+plt.imshow(np.array(img[:,:,129]))
+plt.title('Banda 129')
+plt.colorbar()
+plt.show()
 # Seleccionar píxeles
-#pixel_coords = [(535, 363), (736, 454), (659, 530), (687, 318), (708, 388)] #para las semillas
-#pixel_coords = [(614, 360), (659, 426), (545, 495), (718, 509), (590, 315)] #para la pulpa
+pixel_coords = [(535, 363), (736, 454), (659, 530), (687, 318), (708, 388)] #para las semillas
+pixel_coords = [(614, 360), (659, 426), (545, 495), (718, 509), (590, 315)] #para la pulpa
 # Verificar si las coordenadas están dentro del rango de la imagen
 for y, x in pixel_coords:
  if y >= rows or x >= cols:
@@ -60,7 +60,7 @@ plt.figure()
 plt.plot(wavelengths, average_spectrum, label='Promedio de Pixeles Seleccionados')
 plt.xlabel('Longitud de onda' if 'wavelength' in metadata else 'Bandas')
 plt.ylabel('Intensidad')
-#plt.title('Huella Espectral Promedio Para la Chirimoya (semillas)')
-#plt.title('Huella Espectral Promedio Para la Chirimoya (pulpa)')
+plt.title('Huella Espectral Promedio Para la Chirimoya (semillas)')
+plt.title('Huella Espectral Promedio Para la Chirimoya (pulpa)')
 plt.legend()
 plt.show()
