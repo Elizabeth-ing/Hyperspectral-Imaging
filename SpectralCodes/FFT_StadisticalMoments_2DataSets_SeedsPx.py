@@ -1,4 +1,4 @@
-# CODE 6: FOURIER TRANSFORM AND STATISTICAL MOMENTS FOR 2 DATA SETS OF PULP PIXEL
+# CODE 6: FOURIER TRANSFORM AND STATISTICAL MOMENTS FOR 2 DATA SETS OF SEEDS PIXEL
 # Librerías
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
@@ -48,7 +48,7 @@ print("Dimensiones de la imagen cargada:", img.shape)
  (482, 421), (482, 412), (482, 393), (497, 383), (500, 397),
  (506, 394), (515, 394), (529, 400), (515, 427), (508, 440)
 ]"""
-#PAPAYA 
+#PAPAYA
 pixel_coords = [
  (510,451), (514,458), (525,450), (525,456), (536,464),
  (538,488), (537,503), (547,495), (537,472), (542,446),
