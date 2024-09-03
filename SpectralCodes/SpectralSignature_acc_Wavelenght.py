@@ -4,7 +4,7 @@ import spectral.io.envi as envi
 import matplotlib.pyplot as plt
 import numpy as np
 # Directorio de entrada y nombre base del archivo
-input_folder = "C:/Users/Hp/Documents/Internals"
+input_folder = "C:/Users/Hp/Documents/Internals"   # Ajusta la ruta de los archivos según tu computadora
 base_name = "internals_apple"
 # Archivos HDR y RAW
 hdr_file = f"{input_folder}/{base_name}.hdr"
@@ -30,7 +30,7 @@ img = envi.open(hdr_file, raw_file).load()
 print("Dimensiones de la imagen cargada:", img.shape)
 # Seleccionar píxeles
 pixel_coords = [(633,451), (582,458), (636,478), (579,451), (628,424)] #para las semillas
-#pixel_coords = [(748,475), (707,560), (536,567), (508,403), (738,416)] #para la pulpa
+pixel_coords = [(748,475), (707,560), (536,567), (508,403), (738,416)] #para la pulpa
 # Verificar si las coordenadas están dentro del rango de la imagen
 for y, x in pixel_coords:
  if y >= rows or x >= cols:
@@ -53,6 +53,6 @@ for idx, (y, x) in enumerate(pixel_coords):
 plt.xlabel('Longitud de onda' if 'wavelength' in metadata else 'Bandas')
 plt.ylabel('Intensidad')
 plt.title('Huellas Espectrales de Pixeles Seleccionados Para la Manzana (semillas)')
-#plt.title('Huellas Espectrales de Pixeles Seleccionados Para la Manzana (pulpa)')
+plt.title('Huellas Espectrales de Pixeles Seleccionados Para la Manzana (pulpa)')
 plt.legend()
 plt.show()
