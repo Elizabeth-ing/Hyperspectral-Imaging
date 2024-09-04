@@ -18,6 +18,7 @@ raw_file = f"{input_folder}/{base_name}.raw"
 
 # Leer metadatos
 metadata = envi.read_envi_header(hdr_file)
+
 # Imprimir metadatos
 print("Metadatos del archivo HDR:")
 print(metadata)
