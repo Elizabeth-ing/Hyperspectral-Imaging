@@ -36,6 +36,7 @@ print("Tipo de datos:", dtype)
 
 # Cargar la imagen hiperespectral
 img = envi.open(hdr_file, raw_file).load()
+
 # Coordenadas de las semillas y la pulpa
 seed_coords = [
  (409, 456), (421, 465), (429, 468), (425, 460), (408, 451),
